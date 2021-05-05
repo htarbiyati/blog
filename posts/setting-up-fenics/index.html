@@ -6,7 +6,43 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s">'/home/mary/.local/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc'</span>
 </pre></table></code></div></div><p>After finding out the path to <code class="language-plaintext highlighter-rouge">.matplotlibrc</code> we edit the following line in <code class="language-plaintext highlighter-rouge">.matplotlibrc</code> file</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre><td class="rouge-code"><pre>webagg.address: 0.0.0.0
-</pre></table></code></div></div><p>Instead of <code class="language-plaintext highlighter-rouge">0.0.0.0</code> we use our desired address, like <code class="language-plaintext highlighter-rouge">localhost</code> or <code class="language-plaintext highlighter-rouge">127.0.0.1</code></p><h1 id="using-jupyter-notebook">Using Jupyter Notebook</h1><p>Basically all you have to do is make an instance of FEniCS docker image by running the following command</p><p><code class="language-plaintext highlighter-rouge">docker run --name notebook -w /home/fenics -v $(pwd):/home/fenics/shared -d -p 127.0.0.1:8888:8888 quay.io/fenicsproject/stable 'jupyter-notebook --ip=0.0.0.0'</code></p><p>Then you should go to docker dashboard and inspect the container created to copy the token. After copying the token all you have to do is go to the following address and paste the token and you are ready to use Jupyter notebook!</p><p><code class="language-plaintext highlighter-rouge">http://127.0.0.1:8888</code></p><h1 id="installing-fenics-on-google-colab">Installing FEniCS on Google Colab</h1><p>Current workaround to install FEniCS on Google Colab is by running the below block of code</p><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></table></code></div></div><p>Instead of <code class="language-plaintext highlighter-rouge">0.0.0.0</code> we use our desired address, like <code class="language-plaintext highlighter-rouge">localhost</code> or <code class="language-plaintext highlighter-rouge">127.0.0.1</code></p><h1 id="using-jupyter-notebook">Using Jupyter Notebook</h1><p>Basically all you have to do is make an instance of FEniCS docker image by running the following command</p><p><code class="language-plaintext highlighter-rouge">docker run --name notebook -w /home/fenics -v $(pwd):/home/fenics/shared -d -p 127.0.0.1:8888:8888 quay.io/fenicsproject/stable 'jupyter-notebook --ip=0.0.0.0'</code></p><p>Then you should go to docker dashboard and inspect the container created to copy the token. After copying the token all you have to do is go to the following address and paste the token and you are ready to use Jupyter notebook!</p><p><code class="language-plaintext highlighter-rouge">http://127.0.0.1:8888</code></p><h1 id="using-matplotlib-in-docker">Using Matplotlib in Docker</h1><p>Note that here we have to use <code class="language-plaintext highlighter-rouge">webAgg</code></p><p>Here is the sample code for test</p><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">switch_backend</span><span class="p">(</span><span class="s">'webAgg'</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># Data for plotting
+</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">.</span><span class="nb">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s">'time (s)'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">'voltage (mV)'</span><span class="p">,</span>
+       <span class="n">title</span><span class="o">=</span><span class="s">'About as simple as it gets, folks'</span><span class="p">)</span>   
+<span class="n">ax</span><span class="p">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">"myExampleOfit.png"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></table></code></div></div><h1 id="installing-fenics-on-google-colab">Installing FEniCS on Google Colab</h1><p>Current workaround to install FEniCS on Google Colab is by running the below block of code</p><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
